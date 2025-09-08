@@ -1,180 +1,198 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "lastUpdated": "2025-09-08",
+  "description": "Self-built OSINT analysis tools - no external APIs required",
   "categories": {
     "email": {
       "name": "Email Intelligence",
-      "description": "Sources for email-based investigations",
+      "description": "Self-built email analysis and pattern recognition",
       "sources": [
         {
-          "id": "haveibeenpwned",
-          "name": "Have I Been Pwned",
+          "id": "breach_analysis",
+          "name": "Breach Pattern Analyzer",
           "type": "breach_database",
-          "confidence": 95,
-          "enabled": true,
-          "description": "Check if email appears in known data breaches",
-          "dataTypes": ["breaches", "pastes"],
-          "apiEndpoint": "mock://haveibeenpwned.com/api/v3",
-          "rateLimit": "1500ms",
-          "mock": true
-        },
-        {
-          "id": "emailrep",
-          "name": "EmailRep",
-          "type": "reputation",
           "confidence": 85,
           "enabled": true,
-          "description": "Email reputation and deliverability data",
-          "dataTypes": ["reputation", "deliverability", "blacklist"],
-          "apiEndpoint": "mock://emailrep.io/api",
-          "rateLimit": "1000ms",
-          "mock": true
+          "description": "Analyzes email patterns to predict breach likelihood using built-in algorithms",
+          "dataTypes": ["breach_probability", "pattern_analysis", "domain_risk"],
+          "selfBuilt": true,
+          "methodology": "Pattern-based probability modeling"
         },
         {
-          "id": "socialscan",
-          "name": "Social Media Scanner",
-          "type": "social_media",
+          "id": "email_analysis",
+          "name": "Email Structure Analyzer",
+          "type": "email_structure",
+          "confidence": 95,
+          "enabled": true,
+          "description": "Analyzes email structure, username patterns, and domain characteristics",
+          "dataTypes": ["structure", "patterns", "domain_analysis"],
+          "selfBuilt": true,
+          "methodology": "Email pattern recognition"
+        },
+        {
+          "id": "domain_reputation",
+          "name": "Domain Reputation Analyzer",
+          "type": "reputation",
           "confidence": 80,
           "enabled": true,
-          "description": "Check email usage across social platforms",
-          "dataTypes": ["accounts", "profiles", "registration_dates"],
-          "platforms": ["twitter", "instagram", "facebook", "linkedin"],
-          "mock": true
+          "description": "Analyzes domain reputation based on TLD, structure, and common patterns",
+          "dataTypes": ["reputation", "tld_analysis", "structure_score"],
+          "selfBuilt": true,
+          "methodology": "Domain characteristic analysis"
         }
       ]
     },
     "domain": {
       "name": "Domain Intelligence",
-      "description": "Sources for domain-based investigations",
+      "description": "Self-built domain analysis and reconnaissance",
       "sources": [
         {
-          "id": "whois",
-          "name": "WHOIS Lookup",
-          "type": "registration",
-          "confidence": 98,
-          "enabled": true,
-          "description": "Domain registration and ownership information",
-          "dataTypes": ["registrar", "creation_date", "expiry_date", "nameservers", "contacts"],
-          "apiEndpoint": "mock://whois.lookup.api",
-          "mock": true
-        },
-        {
-          "id": "dns_records",
-          "name": "DNS Records",
-          "type": "infrastructure",
+          "id": "domain_analysis",
+          "name": "Domain Structure Analyzer",
+          "type": "structure_analysis",
           "confidence": 95,
           "enabled": true,
-          "description": "DNS record analysis and subdomain enumeration",
-          "dataTypes": ["A", "AAAA", "MX", "TXT", "CNAME", "NS"],
-          "mock": true
+          "description": "Analyzes domain structure, TLD types, and subdomain patterns",
+          "dataTypes": ["structure", "tld_info", "subdomain_analysis"],
+          "selfBuilt": true,
+          "methodology": "Domain decomposition analysis"
         },
         {
-          "id": "certificate_transparency",
-          "name": "Certificate Transparency",
-          "type": "certificates",
+          "id": "dns_analyzer",
+          "name": "DNS Pattern Simulator",
+          "type": "dns_analysis",
           "confidence": 90,
           "enabled": true,
-          "description": "SSL certificate history and subdomain discovery",
-          "dataTypes": ["certificates", "subdomains", "issuers"],
-          "apiEndpoint": "mock://crt.sh/api",
-          "mock": true
+          "description": "Simulates DNS record patterns based on domain characteristics",
+          "dataTypes": ["A", "MX", "NS", "TXT", "CNAME"],
+          "selfBuilt": true,
+          "methodology": "DNS pattern simulation"
         },
         {
-          "id": "shodan",
-          "name": "Shodan",
-          "type": "network_scan",
-          "confidence": 85,
+          "id": "subdomain_predictor",
+          "name": "Subdomain Pattern Predictor",
+          "type": "subdomain_analysis",
+          "confidence": 75,
           "enabled": true,
-          "description": "Internet-connected device and service discovery",
-          "dataTypes": ["open_ports", "services", "banners", "vulnerabilities"],
-          "apiEndpoint": "mock://api.shodan.io",
-          "mock": true
+          "description": "Predicts likely subdomains based on domain patterns and common conventions",
+          "dataTypes": ["subdomains", "patterns", "common_services"],
+          "selfBuilt": true,
+          "methodology": "Subdomain pattern prediction"
+        },
+        {
+          "id": "domain_age_estimator",
+          "name": "Domain Age Estimator",
+          "type": "temporal_analysis",
+          "confidence": 70,
+          "enabled": true,
+          "description": "Estimates domain age and registration patterns based on structure analysis",
+          "dataTypes": ["estimated_age", "registration_patterns", "lifecycle_stage"],
+          "selfBuilt": true,
+          "methodology": "Domain lifecycle analysis"
         }
       ]
     },
     "username": {
       "name": "Username Intelligence",
-      "description": "Sources for username-based investigations",
+      "description": "Self-built username analysis and social presence prediction",
       "sources": [
         {
-          "id": "sherlock",
-          "name": "Sherlock",
-          "type": "social_media",
+          "id": "username_analysis",
+          "name": "Username Pattern Analyzer",
+          "type": "pattern_analysis",
+          "confidence": 85,
+          "enabled": true,
+          "description": "Analyzes username characteristics and predicts platform presence",
+          "dataTypes": ["patterns", "characteristics", "platform_likelihood"],
+          "selfBuilt": true,
+          "methodology": "Username pattern recognition"
+        },
+        {
+          "id": "social_crawler",
+          "name": "Social Presence Predictor",
+          "type": "social_analysis",
+          "confidence": 80,
+          "enabled": true,
+          "description": "Predicts social media presence using probability modeling",
+          "dataTypes": ["platform_probability", "presence_likelihood", "account_estimation"],
+          "selfBuilt": true,
+          "methodology": "Social presence probability modeling"
+        },
+        {
+          "id": "username_generator",
+          "name": "Username Variant Generator",
+          "type": "variant_analysis",
           "confidence": 75,
           "enabled": true,
-          "description": "Username enumeration across social platforms",
-          "dataTypes": ["profiles", "accounts", "registration_status"],
-          "platforms": ["github", "twitter", "instagram", "reddit", "youtube"],
-          "mock": true
-        },
-        {
-          "id": "github_osint",
-          "name": "GitHub OSINT",
-          "type": "code_repository",
-          "confidence": 90,
-          "enabled": true,
-          "description": "GitHub profile and repository analysis",
-          "dataTypes": ["repositories", "commits", "followers", "organizations"],
-          "apiEndpoint": "mock://api.github.com",
-          "mock": true
-        },
-        {
-          "id": "namemc",
-          "name": "NameMC",
-          "type": "gaming",
-          "confidence": 70,
-          "enabled": true,
-          "description": "Minecraft username history and skin data",
-          "dataTypes": ["name_history", "uuid", "skin_history"],
-          "mock": true
+          "description": "Generates likely username variations and alternatives",
+          "dataTypes": ["variations", "alternatives", "common_patterns"],
+          "selfBuilt": true,
+          "methodology": "Username variation analysis"
         }
       ]
     },
     "ip": {
       "name": "IP Intelligence",
-      "description": "Sources for IP address investigations",
+      "description": "Self-built IP address analysis and geolocation prediction",
       "sources": [
         {
-          "id": "ipinfo",
-          "name": "IPInfo",
-          "type": "geolocation",
-          "confidence": 95,
-          "enabled": true,
-          "description": "IP geolocation and ISP information",
-          "dataTypes": ["location", "isp", "organization", "asn"],
-          "apiEndpoint": "mock://ipinfo.io/api",
-          "mock": true
-        },
-        {
-          "id": "virustotal_ip",
-          "name": "VirusTotal IP",
-          "type": "threat_intelligence",
+          "id": "ip_analyzer",
+          "name": "IP Pattern Analyzer",
+          "type": "ip_analysis",
           "confidence": 90,
           "enabled": true,
-          "description": "IP reputation and malware analysis",
-          "dataTypes": ["reputation", "malware", "detections", "related_domains"],
-          "apiEndpoint": "mock://www.virustotal.com/api/v3",
-          "mock": true
+          "description": "Analyzes IP address patterns, classes, and characteristics",
+          "dataTypes": ["ip_class", "private_public", "reserved_ranges"],
+          "selfBuilt": true,
+          "methodology": "IP address pattern analysis"
         },
         {
-          "id": "censys",
-          "name": "Censys",
-          "type": "network_scan",
+          "id": "geolocation_predictor",
+          "name": "Geolocation Predictor",
+          "type": "geolocation",
+          "confidence": 70,
+          "enabled": true,
+          "description": "Predicts approximate location based on IP address patterns",
+          "dataTypes": ["location", "region", "estimated_coordinates"],
+          "selfBuilt": true,
+          "methodology": "IP-based location estimation"
+        },
+        {
+          "id": "network_analyzer",
+          "name": "Network Range Analyzer",
+          "type": "network_analysis",
           "confidence": 85,
           "enabled": true,
-          "description": "Internet-wide scanning and device fingerprinting",
-          "dataTypes": ["services", "certificates", "banners", "protocols"],
-          "apiEndpoint": "mock://search.censys.io/api",
-          "mock": true
+          "description": "Analyzes network ranges and predicts ISP characteristics",
+          "dataTypes": ["network_range", "isp_prediction", "subnet_analysis"],
+          "selfBuilt": true,
+          "methodology": "Network range pattern analysis"
         }
       ]
     }
   },
   "settings": {
     "maxConcurrentRequests": 5,
-    "defaultTimeout": 10000,
-    "retryAttempts": 3,
-    "cacheTTL": 3600,
-    "rateLimitBuffer": 100
+    "defaultTimeout": 5000,
+    "retryAttempts": 2,
+    "cacheTTL": 1800,
+    "rateLimitBuffer": 50,
+    "analysisDelay": {
+      "min": 300,
+      "max": 1000
+    }
+  },
+  "capabilities": {
+    "selfContained": true,
+    "requiresExternalAPIs": false,
+    "privacyFriendly": true,
+    "educational": true,
+    "realTimeAnalysis": true
+  },
+  "methodologies": {
+    "patternRecognition": "Analyzes input patterns to predict characteristics and behaviors",
+    "probabilityModeling": "Uses statistical models to predict likelihood of various outcomes",
+    "structureAnalysis": "Breaks down inputs into components for detailed analysis",
+    "characteristicMapping": "Maps input characteristics to known patterns and behaviors"
   }
 }
