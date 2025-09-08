@@ -1,4 +1,4 @@
-// OSINT Data Aggregator - Main JavaScript
+// OSINT Data Aggregator - Real Intelligence Gathering
 class OSINTAggregator {
     constructor() {
         this.currentQuery = '';
@@ -18,7 +18,7 @@ class OSINTAggregator {
             
             if (initialized) {
                 this.displaySourceStats();
-                console.log('OSINT Data Aggregator initialized with sources');
+                console.log('Real OSINT Data Aggregator initialized with intelligence sources');
             } else {
                 console.warn('OSINT Data Aggregator initialized without sources');
             }
@@ -114,7 +114,7 @@ class OSINTAggregator {
 
         this.currentQuery = query;
         
-        console.log(`Searching for: ${query} (type: ${searchType})`);
+        console.log(`Gathering real intelligence for: ${query} (type: ${searchType})`);
         
         // Show results section
         document.getElementById('resultsSection').style.display = 'block';
@@ -122,27 +122,24 @@ class OSINTAggregator {
         // Show loading state
         this.showLoading();
 
-        // Perform actual search if source manager is available
+        // Perform real intelligence gathering
         if (this.sourceManager && this.sourceManager.initialized) {
             try {
-                await this.performOSINTSearch(query, searchType);
+                await this.performRealIntelligenceGathering(query, searchType);
             } catch (error) {
-                console.error('Search failed:', error);
-                this.showError('Search failed. Please try again.');
+                console.error('Intelligence gathering failed:', error);
+                this.showError('Intelligence gathering failed. Please try again.');
             }
         } else {
-            // Fallback to placeholder
-            setTimeout(() => {
-                this.displayPlaceholderResults(query, searchType);
-            }, 1500);
+            this.showError('Intelligence sources not available');
         }
     }
 
-    async performOSINTSearch(query, searchType) {
+    async performRealIntelligenceGathering(query, searchType) {
         const availableSources = this.sourceManager.getSourcesForType(searchType);
         
         if (availableSources.length === 0) {
-            this.showError(`No sources available for ${searchType} searches`);
+            this.showError(`No intelligence sources available for ${searchType} searches`);
             return;
         }
 
@@ -160,15 +157,17 @@ class OSINTAggregator {
             }
         };
 
-        console.log(`Querying ${availableSources.length} sources for ${searchType}: ${query}`);
+        console.log(`Querying ${availableSources.length} intelligence sources for ${searchType}: ${query}`);
 
-        // Query all sources concurrently
-        const searchPromises = availableSources.map(source => 
-            this.querySourceWithRetry(source.id, query, searchType)
+        // Query all sources concurrently with rate limiting
+        const intelligencePromises = availableSources.map((source, index) => 
+            this.delay(index * 500).then(() => // Stagger requests
+                this.querySourceWithRetry(source.id, query, searchType)
+            )
         );
 
-        // Wait for all searches to complete
-        const results = await Promise.allSettled(searchPromises);
+        // Wait for all intelligence gathering to complete
+        const results = await Promise.allSettled(intelligencePromises);
         
         // Process results
         results.forEach((result, index) => {
@@ -180,12 +179,12 @@ class OSINTAggregator {
                 }
             } else {
                 this.currentResults.summary.failedSources++;
-                console.warn(`Source ${availableSources[index].name} failed:`, result.reason);
+                console.warn(`Intelligence source ${availableSources[index].name} failed:`, result.reason);
             }
         });
 
-        // Display results
-        this.displaySearchResults();
+        // Display intelligence results
+        this.displayIntelligenceResults();
         this.updateTimelineResults();
         this.updateNetworkResults();
     }
@@ -195,12 +194,12 @@ class OSINTAggregator {
             try {
                 return await this.sourceManager.querySource(sourceId, query, searchType);
             } catch (error) {
-                console.warn(`Source ${sourceId} attempt ${attempt} failed:`, error);
+                console.warn(`Intelligence source ${sourceId} attempt ${attempt} failed:`, error);
                 if (attempt === maxRetries) {
                     throw error;
                 }
                 // Wait before retry
-                await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+                await this.delay(2000 * attempt);
             }
         }
     }
@@ -211,33 +210,33 @@ class OSINTAggregator {
             <div style="text-align: center; padding: 40px;">
                 <div class="loading"></div>
                 <p style="margin-top: 15px; color: var(--text-secondary);">
-                    Searching across OSINT sources...
+                    Gathering real intelligence from OSINT sources...
                 </p>
             </div>
         `;
     }
 
-    displaySearchResults() {
+    displayIntelligenceResults() {
         const resultsDiv = document.getElementById('searchResults');
         const results = this.currentResults;
         
-        // Create summary section
+        // Create intelligence summary section
         const summaryHtml = `
             <div class="search-summary">
-                <h4>Search Results for: <span style="color: var(--accent-primary);">${results.query}</span></h4>
+                <h4>Intelligence Report for: <span style="color: var(--accent-primary);">${results.query}</span></h4>
                 <div class="summary-stats">
                     <span class="stat">Type: ${results.searchType.charAt(0).toUpperCase() + results.searchType.slice(1)}</span>
                     <span class="stat">Sources: ${results.summary.successfulSources}/${results.summary.totalSources}</span>
                     <span class="stat ${results.summary.dataFound ? 'data-found' : 'no-data'}">
-                        ${results.summary.dataFound ? '✅ Data Found' : '❌ No Data'}
+                        ${results.summary.dataFound ? '✅ Intelligence Gathered' : '❌ No Intelligence'}
                     </span>
                 </div>
                 <hr style="margin: 15px 0; border-color: var(--border-color);">
             </div>
         `;
 
-        // Create results from each source
-        const resultsHtml = results.sources.map(sourceResult => {
+        // Create intelligence cards from each source
+        const intelligenceHtml = results.sources.map(sourceResult => {
             const confidence = sourceResult.confidence;
             const data = sourceResult.data;
             
@@ -249,27 +248,28 @@ class OSINTAggregator {
                             <span class="confidence-badge">${confidence}%</span>
                         </div>
                         <div class="result-status ${data.found ? 'found' : 'not-found'}">
-                            ${data.found ? '✅ Found' : '❌ Not Found'}
+                            ${data.found ? '✅ Intelligence Found' : '❌ No Data'}
                         </div>
                     </div>
                     
-                    ${data.found ? this.renderSourceData(sourceResult) : `
+                    ${data.found ? this.renderIntelligenceData(sourceResult) : `
                         <div class="no-data-message">
-                            <p>No data found for this query</p>
+                            <p>${data.error || 'No intelligence data found for this query'}</p>
                         </div>
                     `}
                     
                     <div class="result-footer">
-                        <small>Queried: ${new Date(sourceResult.timestamp).toLocaleTimeString()}</small>
+                        <small>Collected: ${new Date(sourceResult.timestamp).toLocaleString()}</small>
+                        ${data.collectionMethod ? `<br><small>Method: ${data.collectionMethod}</small>` : ''}
                     </div>
                 </div>
             `;
         }).join('');
 
-        resultsDiv.innerHTML = summaryHtml + '<div class="results-grid">' + resultsHtml + '</div>';
+        resultsDiv.innerHTML = summaryHtml + '<div class="results-grid">' + intelligenceHtml + '</div>';
     }
 
-    renderSourceData(sourceResult) {
+    renderIntelligenceData(sourceResult) {
         const data = sourceResult.data;
         const sourceType = this.sourceManager.findSourceById(sourceResult.sourceId)?.type;
         
@@ -277,7 +277,7 @@ class OSINTAggregator {
         if (data.error) {
             return `
                 <div class="data-content">
-                    <h5>⚠️ Error</h5>
+                    <h5>⚠️ Collection Error</h5>
                     <div class="error-message">
                         <p>${data.error}</p>
                     </div>
@@ -286,174 +286,113 @@ class OSINTAggregator {
         }
         
         switch (sourceType) {
-            case 'breach_database':
+            case 'certificate_intelligence':
                 return `
                     <div class="data-content">
-                        <h5>🚨 Breach Analysis Results</h5>
-                        ${data.breaches ? `
-                            <div class="breach-list">
-                                ${data.breaches.map(breach => `
-                                    <div class="breach-item">
-                                        <span class="breach-name">${breach}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                            <p><strong>Total Breaches:</strong> ${data.totalBreaches || 0}</p>
-                            ${data.lastBreach ? `<p><strong>Most Recent:</strong> ${data.lastBreach}</p>` : ''}
-                        ` : `
-                            <p>${data.message || 'No breach patterns detected'}</p>
-                        `}
-                        <small><em>Method: ${data.analysisMethod || 'Pattern analysis'}</em></small>
-                    </div>
-                `;
-                
-            case 'email_structure':
-                return `
-                    <div class="data-content">
-                        <h5>📧 Email Structure Analysis</h5>
-                        ${data.structure ? `
-                            <div class="email-info">
-                                <p><strong>Username:</strong> ${data.structure.username}</p>
-                                <p><strong>Domain:</strong> ${data.structure.domain}</p>
-                                <p><strong>Username Length:</strong> ${data.structure.usernameLength}</p>
-                            </div>
-                        ` : ''}
-                        ${data.patterns ? `
-                            <div class="pattern-info">
-                                <h6>Pattern Analysis:</h6>
-                                <p>Has Numbers: ${data.patterns.hasNumbers ? 'Yes' : 'No'}</p>
-                                <p>Has Special Characters: ${data.patterns.hasSpecialChars ? 'Yes' : 'No'}</p>
-                                <p>Common Format: ${data.patterns.isCommonFormat ? 'Yes' : 'No'}</p>
-                            </div>
-                        ` : ''}
-                        <small><em>Method: ${data.analysisMethod || 'Structure analysis'}</em></small>
-                    </div>
-                `;
-                
-            case 'pattern_analysis':
-                return `
-                    <div class="data-content">
-                        <h5>🔍 Username Pattern Analysis</h5>
-                        ${data.profiles ? `
-                            <div class="profile-predictions">
-                                <h6>Platform Predictions:</h6>
-                                ${data.profiles.map(profile => `
-                                    <div class="profile-item">
-                                        <span class="platform">${profile.platform}</span>
-                                        <span class="confidence">${profile.confidence ? Math.floor(profile.confidence * 100) : 'N/A'}%</span>
-                                        <br><small>${profile.reasoning || 'Pattern-based prediction'}</small>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        ${data.usernameCharacteristics ? `
-                            <div class="characteristics">
-                                <h6>Characteristics:</h6>
-                                <p>Length: ${data.usernameCharacteristics.length}</p>
-                                <p>Has Numbers: ${data.usernameCharacteristics.hasNumbers ? 'Yes' : 'No'}</p>
-                                <p>Special Characters: ${data.usernameCharacteristics.hasSpecialChars ? 'Yes' : 'No'}</p>
-                            </div>
-                        ` : ''}
-                        <small><em>Method: ${data.analysisMethod || 'Pattern recognition'}</em></small>
-                    </div>
-                `;
-                
-            case 'social_analysis':
-                return `
-                    <div class="data-content">
-                        <h5>👥 Social Presence Analysis</h5>
-                        ${data.profiles ? `
-                            <div class="social-predictions">
-                                <p><strong>Platforms Found:</strong> ${data.totalFound || 0}/${data.totalChecked || 0}</p>
-                                ${data.profiles.map(profile => `
-                                    <div class="social-item">
-                                        <span class="platform">${profile.platform}</span>
-                                        <span class="confidence">${profile.confidence}%</span>
-                                        <span class="status">${profile.status}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        ` : `
-                            <p>${data.message || 'No social presence patterns detected'}</p>
-                        `}
-                        <small><em>Method: ${data.analysisMethod || 'Social modeling'}</em></small>
-                    </div>
-                `;
-                
-            case 'structure_analysis':
-                return `
-                    <div class="data-content">
-                        <h5>🌐 Domain Structure Analysis</h5>
-                        ${data.structure ? `
-                            <div class="domain-structure">
-                                <p><strong>TLD:</strong> ${data.structure.tld} (${data.tldInfo?.type || 'unknown'})</p>
-                                <p><strong>Is Subdomain:</strong> ${data.structure.isSubdomain ? 'Yes' : 'No'}</p>
-                                <p><strong>Domain Depth:</strong> ${data.structure.depth} levels</p>
-                                ${data.structure.subdomain ? `<p><strong>Subdomain Type:</strong> ${data.subdomainAnalysis?.type || 'custom'}</p>` : ''}
-                            </div>
-                        ` : ''}
-                        <small><em>Method: ${data.analysisMethod || 'Structure analysis'}</em></small>
-                    </div>
-                `;
-                
-            case 'dns_analysis':
-                return `
-                    <div class="data-content">
-                        <h5>🌐 DNS Pattern Analysis</h5>
-                        ${data.records ? `
-                            <div class="dns-records">
-                                ${Object.entries(data.records).map(([type, records]) => `
-                                    <p><strong>${type} Records:</strong> ${Array.isArray(records) ? records.join(', ') : records}</p>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        <small><em>Method: ${data.analysisMethod || 'DNS simulation'}</em></small>
-                    </div>
-                `;
-                
-            case 'ip_analysis':
-                return `
-                    <div class="data-content">
-                        <h5>🌍 IP Address Analysis</h5>
-                        <div class="ip-info">
-                            <p><strong>IP Class:</strong> ${data.ipClass || 'Unknown'}</p>
-                            <p><strong>Type:</strong> ${data.isPrivate ? 'Private' : 'Public'} ${data.isReserved ? '(Reserved)' : ''}</p>
-                            ${data.location ? `
-                                <h6>Location Estimate:</h6>
-                                <p><strong>Country:</strong> ${data.location.country}</p>
-                                <p><strong>City:</strong> ${data.location.city}</p>
-                                <p><strong>ISP:</strong> ${data.location.isp}</p>
-                                <p><strong>Coordinates:</strong> ${data.location.coordinates.lat}, ${data.location.coordinates.lon}</p>
+                        <h5>🔒 Certificate Intelligence</h5>
+                        <div class="cert-info">
+                            <p><strong>Total Certificates:</strong> ${data.totalCertificates || 0}</p>
+                            ${data.subdomains && data.subdomains.length > 0 ? `
+                                <p><strong>Subdomains Found:</strong> ${data.subdomains.slice(0, 5).join(', ')}${data.subdomains.length > 5 ? '...' : ''}</p>
+                            ` : ''}
+                            ${data.issuers && data.issuers.length > 0 ? `
+                                <p><strong>Certificate Authorities:</strong> ${data.issuers.join(', ')}</p>
                             ` : ''}
                         </div>
-                        <small><em>Method: ${data.analysisMethod || 'IP pattern analysis'}</em></small>
                     </div>
                 `;
                 
-            case 'geolocation':
+            case 'dns_intelligence':
                 return `
                     <div class="data-content">
-                        <h5>📍 Geolocation Prediction</h5>
-                        ${data.location ? `
-                            <div class="location-info">
-                                <p><strong>Country:</strong> ${data.location.country}</p>
-                                <p><strong>City:</strong> ${data.location.city}</p>
-                                <p><strong>ISP:</strong> ${data.location.isp}</p>
-                                <p><strong>Coordinates:</strong> ${data.location.coordinates.lat}, ${data.location.coordinates.lon}</p>
-                            </div>
-                        ` : ''}
-                        <small><em>Method: ${data.analysisMethod || 'Location prediction'}</em></small>
+                        <h5>🌐 DNS Intelligence</h5>
+                        <div class="dns-info">
+                            ${data.ipAddresses && data.ipAddresses.length > 0 ? `
+                                <p><strong>IP Addresses:</strong> ${data.ipAddresses.join(', ')}</p>
+                            ` : ''}
+                            ${data.nameservers && data.nameservers.length > 0 ? `
+                                <p><strong>Name Servers:</strong> ${data.nameservers.join(', ')}</p>
+                            ` : ''}
+                            ${data.mailServers && data.mailServers.length > 0 ? `
+                                <p><strong>Mail Servers:</strong> ${data.mailServers.join(', ')}</p>
+                            ` : ''}
+                            ${data.textRecords && data.textRecords.length > 0 ? `
+                                <p><strong>TXT Records:</strong> ${data.textRecords.length} found</p>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+            case 'social_intelligence':
+                return `
+                    <div class="data-content">
+                        <h5>👥 Social Media Intelligence</h5>
+                        <div class="social-info">
+                            <p><strong>Platforms Found:</strong> ${data.totalFound || 0}/${data.totalChecked || 0}</p>
+                            ${data.profiles && data.profiles.length > 0 ? `
+                                <div class="profile-list">
+                                    ${data.profiles.map(profile => `
+                                        <div class="profile-item">
+                                            <span class="platform">${profile.platform}</span>
+                                            <span class="status">${profile.status}</span>
+                                            <a href="${profile.url}" target="_blank" rel="noopener">View Profile</a>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+            case 'email_intelligence':
+                return `
+                    <div class="data-content">
+                        <h5>📧 Email Intelligence</h5>
+                        <div class="email-info">
+                            <p><strong>Username:</strong> ${data.username}</p>
+                            <p><strong>Domain:</strong> ${data.domain}</p>
+                            ${data.structure ? `
+                                <div class="structure-info">
+                                    <p><strong>Username Length:</strong> ${data.structure.usernameLength}</p>
+                                    <p><strong>Has Numbers:</strong> ${data.structure.hasNumbers ? 'Yes' : 'No'}</p>
+                                    <p><strong>Special Characters:</strong> ${data.structure.hasSpecialChars ? 'Yes' : 'No'}</p>
+                                </div>
+                            ` : ''}
+                            ${data.domainDNS && data.domainDNS.found ? `
+                                <p><strong>Domain Intelligence:</strong> DNS records found</p>
+                            ` : ''}
+                            ${data.socialProfiles && data.socialProfiles.found ? `
+                                <p><strong>Social Profiles:</strong> ${data.socialProfiles.totalFound} profiles found</p>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+            case 'ip_intelligence':
+                return `
+                    <div class="data-content">
+                        <h5>🌍 IP Intelligence</h5>
+                        <div class="ip-info">
+                            <p><strong>Country:</strong> ${data.country || 'Unknown'}</p>
+                            <p><strong>Region:</strong> ${data.region || 'Unknown'}</p>
+                            <p><strong>City:</strong> ${data.city || 'Unknown'}</p>
+                            <p><strong>Organization:</strong> ${data.organization || data.isp || 'Unknown'}</p>
+                            ${data.coordinates && data.coordinates.lat ? `
+                                <p><strong>Coordinates:</strong> ${data.coordinates.lat}, ${data.coordinates.lon}</p>
+                            ` : ''}
+                            ${data.timezone ? `<p><strong>Timezone:</strong> ${data.timezone}</p>` : ''}
+                        </div>
                     </div>
                 `;
                 
             default:
                 return `
                     <div class="data-content">
-                        <h5>📊 Analysis Results</h5>
+                        <h5>📊 Intelligence Data</h5>
                         <div class="generic-data">
-                            <p>Analysis completed by ${sourceResult.sourceName}</p>
+                            <p>Intelligence gathered by ${sourceResult.sourceName}</p>
                             ${data.message ? `<p>${data.message}</p>` : ''}
-                            ${data.analysisMethod ? `<p><strong>Method:</strong> ${data.analysisMethod}</p>` : ''}
+                            ${data.collectionMethod ? `<p><strong>Method:</strong> ${data.collectionMethod}</p>` : ''}
                         </div>
                     </div>
                 `;
@@ -468,40 +407,46 @@ class OSINTAggregator {
             return;
         }
 
-        // Create timeline data from search results
+        // Create timeline data from intelligence results
         const timelineEvents = [];
         
         this.currentResults.sources.forEach(sourceResult => {
             if (sourceResult.data.found) {
                 const data = sourceResult.data;
                 
-                // Add events based on source type
-                if (data.creationDate) {
-                    timelineEvents.push({
-                        date: data.creationDate,
-                        event: `Domain registered`,
-                        source: sourceResult.sourceName,
-                        type: 'registration'
+                // Add certificate events
+                if (data.certificates) {
+                    data.certificates.forEach(cert => {
+                        if (cert.notBefore) {
+                            timelineEvents.push({
+                                date: cert.notBefore,
+                                event: `Certificate issued by ${cert.issuer}`,
+                                source: sourceResult.sourceName,
+                                type: 'certificate'
+                            });
+                        }
                     });
                 }
                 
-                if (data.lastBreach) {
-                    timelineEvents.push({
-                        date: data.lastBreach,
-                        event: `Last data breach`,
-                        source: sourceResult.sourceName,
-                        type: 'security'
-                    });
-                }
-                
+                // Add social media events
                 if (data.profiles) {
                     data.profiles.forEach(profile => {
                         timelineEvents.push({
-                            date: '2018-01-01', // Mock date
-                            event: `${profile.platform} profile found`,
+                            date: new Date().toISOString().split('T')[0], // Today as discovery date
+                            event: `${profile.platform} profile discovered`,
                             source: sourceResult.sourceName,
                             type: 'social'
                         });
+                    });
+                }
+                
+                // Add domain registration events
+                if (data.domain) {
+                    timelineEvents.push({
+                        date: new Date().toISOString().split('T')[0],
+                        event: `Domain intelligence gathered`,
+                        source: sourceResult.sourceName,
+                        type: 'domain'
                     });
                 }
             }
@@ -512,7 +457,7 @@ class OSINTAggregator {
 
         const timelineHtml = `
             <div class="timeline-header">
-                <h3>📅 Timeline Analysis</h3>
+                <h3>📅 Intelligence Timeline</h3>
                 <p>${timelineEvents.length} events found for ${this.currentResults.query}</p>
             </div>
             <div class="timeline-events">
@@ -540,7 +485,7 @@ class OSINTAggregator {
             return;
         }
 
-        // Create network relationships from search results
+        // Create network relationships from intelligence results
         const relationships = [];
         const entities = new Set([this.currentResults.query]);
         
@@ -548,22 +493,36 @@ class OSINTAggregator {
             if (sourceResult.data.found) {
                 const data = sourceResult.data;
                 
-                // Add related entities
-                if (data.nameservers) {
-                    data.nameservers.forEach(ns => {
-                        entities.add(ns);
+                // Add IP relationships
+                if (data.ipAddresses) {
+                    data.ipAddresses.forEach(ip => {
+                        entities.add(ip);
                         relationships.push({
                             from: this.currentResults.query,
-                            to: ns,
-                            type: 'nameserver',
+                            to: ip,
+                            type: 'resolves_to',
                             source: sourceResult.sourceName
                         });
                     });
                 }
                 
+                // Add subdomain relationships
+                if (data.subdomains) {
+                    data.subdomains.slice(0, 10).forEach(subdomain => {
+                        entities.add(subdomain);
+                        relationships.push({
+                            from: this.currentResults.query,
+                            to: subdomain,
+                            type: 'subdomain',
+                            source: sourceResult.sourceName
+                        });
+                    });
+                }
+                
+                // Add social profile relationships
                 if (data.profiles) {
                     data.profiles.forEach(profile => {
-                        const profileId = `${profile.platform}:${profile.username}`;
+                        const profileId = `${profile.platform}:${profile.username || this.currentResults.query}`;
                         entities.add(profileId);
                         relationships.push({
                             from: this.currentResults.query,
@@ -574,12 +533,14 @@ class OSINTAggregator {
                     });
                 }
                 
-                if (data.isp) {
-                    entities.add(data.isp);
+                // Add organization relationships
+                if (data.organization || data.isp) {
+                    const org = data.organization || data.isp;
+                    entities.add(org);
                     relationships.push({
                         from: this.currentResults.query,
-                        to: data.isp,
-                        type: 'network',
+                        to: org,
+                        type: 'organization',
                         source: sourceResult.sourceName
                     });
                 }
@@ -588,17 +549,17 @@ class OSINTAggregator {
 
         const networkHtml = `
             <div class="network-header">
-                <h3>🕸️ Network Relationships</h3>
+                <h3>🕸️ Intelligence Network</h3>
                 <p>${entities.size} entities, ${relationships.length} relationships</p>
             </div>
             <div class="network-visualization">
                 <div class="network-stats">
                     <div class="stat-item">
-                        <span class="stat-label">Central Entity:</span>
+                        <span class="stat-label">Target Entity:</span>
                         <span class="stat-value">${this.currentResults.query}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Connected Entities:</span>
+                        <span class="stat-label">Related Entities:</span>
                         <span class="stat-value">${entities.size - 1}</span>
                     </div>
                 </div>
@@ -626,15 +587,15 @@ class OSINTAggregator {
     }
 
     displaySourceStats() {
-        // Add source statistics to the footer or header
+        // Add source statistics to the header
         if (this.sourceManager && this.sourceManager.initialized) {
             const stats = this.sourceManager.getSourceStats();
-            console.log('OSINT Sources loaded:', stats);
+            console.log('Real OSINT intelligence sources loaded:', stats);
             
             // Update the header subtitle with source count
             const headerP = document.querySelector('.header p');
             if (headerP) {
-                headerP.textContent = `Gather and visualize intelligence from ${stats.totalSources} public sources`;
+                headerP.textContent = `Real intelligence gathering from ${stats.totalSources} OSINT sources`;
             }
         }
     }
@@ -644,7 +605,7 @@ class OSINTAggregator {
         timelineDiv.innerHTML = `
             <div style="text-align: center; color: var(--text-secondary);">
                 <h3>📅 Timeline View</h3>
-                <p>Timeline visualization will be implemented in upcoming commits</p>
+                <p>Intelligence timeline will be populated after data collection</p>
             </div>
         `;
     }
@@ -654,32 +615,9 @@ class OSINTAggregator {
         networkDiv.innerHTML = `
             <div style="text-align: center; color: var(--text-secondary);">
                 <h3>🕸️ Network Graph</h3>
-                <p>Relationship mapping will be implemented in upcoming commits</p>
+                <p>Relationship mapping will be populated after data collection</p>
             </div>
         `;
-    }
-
-    // Keep the old placeholder method for fallback
-    displayPlaceholderResults(query, searchType) {
-        const resultsDiv = document.getElementById('searchResults');
-        
-        resultsDiv.innerHTML = `
-            <div class="search-summary">
-                <h4>Search Results for: <span style="color: var(--accent-primary);">${query}</span></h4>
-                <p>Type: ${searchType.charAt(0).toUpperCase() + searchType.slice(1)}</p>
-                <hr style="margin: 15px 0; border-color: var(--border-color);">
-            </div>
-            
-            <div class="placeholder-message">
-                <p style="color: var(--text-secondary); text-align: center; padding: 20px;">
-                    🚧 Source manager not available<br>
-                    Please ensure all files are properly loaded
-                </p>
-            </div>
-        `;
-
-        this.updateTimelinePlaceholder();
-        this.updateNetworkPlaceholder();
     }
 
     showError(message) {
@@ -690,21 +628,48 @@ class OSINTAggregator {
             </div>
         `;
     }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Load source manager script
-    const script = document.createElement('script');
-    script.src = './components/source-manager.js';
-    script.onload = () => {
-        // SourceManager is now available
-        new OSINTAggregator();
+    let componentsLoaded = 0;
+    const totalComponents = 2;
+    
+    function checkAllComponentsLoaded() {
+        componentsLoaded++;
+        if (componentsLoaded === totalComponents) {
+            console.log('All OSINT components loaded, initializing aggregator...');
+            new OSINTAggregator();
+        }
+    }
+    
+    // Load OSINT collector
+    const collectorScript = document.createElement('script');
+    collectorScript.src = './components/osint-collector.js';
+    collectorScript.onload = () => {
+        console.log('Real OSINT collector loaded');
+        checkAllComponentsLoaded();
     };
-    script.onerror = () => {
+    collectorScript.onerror = () => {
+        console.error('Failed to load osint-collector.js');
+        checkAllComponentsLoaded();
+    };
+    document.head.appendChild(collectorScript);
+    
+    // Load source manager
+    const managerScript = document.createElement('script');
+    managerScript.src = './components/source-manager.js';
+    managerScript.onload = () => {
+        console.log('Integrated source manager loaded');
+        checkAllComponentsLoaded();
+    };
+    managerScript.onerror = () => {
         console.error('Failed to load source-manager.js');
-        // Initialize without sources
-        new OSINTAggregator();
+        checkAllComponentsLoaded();
     };
-    document.head.appendChild(script);
+    document.head.appendChild(managerScript);
 });

@@ -1,198 +1,165 @@
 {
-  "version": "2.0",
+  "version": "3.0",
   "lastUpdated": "2025-09-08",
-  "description": "Self-built OSINT analysis tools - no external APIs required",
+  "description": "Real OSINT intelligence collection sources",
   "categories": {
     "email": {
       "name": "Email Intelligence",
-      "description": "Self-built email analysis and pattern recognition",
+      "description": "Real email intelligence gathering and analysis",
       "sources": [
         {
-          "id": "breach_analysis",
-          "name": "Breach Pattern Analyzer",
-          "type": "breach_database",
-          "confidence": 85,
+          "id": "email_intelligence",
+          "name": "Email Intelligence Collector",
+          "type": "email_intelligence",
+          "confidence": 90,
           "enabled": true,
-          "description": "Analyzes email patterns to predict breach likelihood using built-in algorithms",
-          "dataTypes": ["breach_probability", "pattern_analysis", "domain_risk"],
-          "selfBuilt": true,
-          "methodology": "Pattern-based probability modeling"
+          "description": "Multi-source email analysis combining domain intelligence and social profiles",
+          "dataTypes": ["domain_analysis", "social_correlation", "structure_analysis"],
+          "realIntelligence": true,
+          "collectionMethod": "Multi-source correlation"
         },
         {
-          "id": "email_analysis",
-          "name": "Email Structure Analyzer",
-          "type": "email_structure",
+          "id": "dns_intelligence",
+          "name": "Domain DNS Intelligence",
+          "type": "dns_intelligence", 
           "confidence": 95,
           "enabled": true,
-          "description": "Analyzes email structure, username patterns, and domain characteristics",
-          "dataTypes": ["structure", "patterns", "domain_analysis"],
-          "selfBuilt": true,
-          "methodology": "Email pattern recognition"
+          "description": "Real DNS record collection via DNS-over-HTTPS",
+          "dataTypes": ["A", "MX", "NS", "TXT", "CNAME"],
+          "realIntelligence": true,
+          "collectionMethod": "DNS over HTTPS"
         },
         {
-          "id": "domain_reputation",
-          "name": "Domain Reputation Analyzer",
-          "type": "reputation",
-          "confidence": 80,
+          "id": "certificate_intelligence",
+          "name": "Certificate Transparency",
+          "type": "certificate_intelligence",
+          "confidence": 92,
           "enabled": true,
-          "description": "Analyzes domain reputation based on TLD, structure, and common patterns",
-          "dataTypes": ["reputation", "tld_analysis", "structure_score"],
-          "selfBuilt": true,
-          "methodology": "Domain characteristic analysis"
+          "description": "Real SSL certificate data from Certificate Transparency logs",
+          "dataTypes": ["certificates", "subdomains", "issuers"],
+          "realIntelligence": true,
+          "collectionMethod": "Certificate Transparency Logs"
         }
       ]
     },
     "domain": {
       "name": "Domain Intelligence",
-      "description": "Self-built domain analysis and reconnaissance",
+      "description": "Real domain reconnaissance and analysis",
       "sources": [
         {
-          "id": "domain_analysis",
-          "name": "Domain Structure Analyzer",
-          "type": "structure_analysis",
+          "id": "certificate_intelligence",
+          "name": "Certificate Transparency",
+          "type": "certificate_intelligence",
+          "confidence": 92,
+          "enabled": true,
+          "description": "Real SSL certificate data and subdomain discovery",
+          "dataTypes": ["certificates", "subdomains", "issuers", "validity_periods"],
+          "realIntelligence": true,
+          "collectionMethod": "Certificate Transparency Logs"
+        },
+        {
+          "id": "dns_intelligence",
+          "name": "DNS Intelligence Collector",
+          "type": "dns_intelligence",
           "confidence": 95,
           "enabled": true,
-          "description": "Analyzes domain structure, TLD types, and subdomain patterns",
-          "dataTypes": ["structure", "tld_info", "subdomain_analysis"],
-          "selfBuilt": true,
-          "methodology": "Domain decomposition analysis"
+          "description": "Complete DNS record analysis via secure DNS queries",
+          "dataTypes": ["A", "AAAA", "MX", "NS", "TXT", "CNAME"],
+          "realIntelligence": true,
+          "collectionMethod": "DNS over HTTPS"
         },
         {
-          "id": "dns_analyzer",
-          "name": "DNS Pattern Simulator",
-          "type": "dns_analysis",
-          "confidence": 90,
+          "id": "search_intelligence",
+          "name": "Search Intelligence Generator",
+          "type": "search_intelligence",
+          "confidence": 80,
           "enabled": true,
-          "description": "Simulates DNS record patterns based on domain characteristics",
-          "dataTypes": ["A", "MX", "NS", "TXT", "CNAME"],
-          "selfBuilt": true,
-          "methodology": "DNS pattern simulation"
-        },
-        {
-          "id": "subdomain_predictor",
-          "name": "Subdomain Pattern Predictor",
-          "type": "subdomain_analysis",
-          "confidence": 75,
-          "enabled": true,
-          "description": "Predicts likely subdomains based on domain patterns and common conventions",
-          "dataTypes": ["subdomains", "patterns", "common_services"],
-          "selfBuilt": true,
-          "methodology": "Subdomain pattern prediction"
-        },
-        {
-          "id": "domain_age_estimator",
-          "name": "Domain Age Estimator",
-          "type": "temporal_analysis",
-          "confidence": 70,
-          "enabled": true,
-          "description": "Estimates domain age and registration patterns based on structure analysis",
-          "dataTypes": ["estimated_age", "registration_patterns", "lifecycle_stage"],
-          "selfBuilt": true,
-          "methodology": "Domain lifecycle analysis"
+          "description": "Generates targeted search queries for manual investigation",
+          "dataTypes": ["search_queries", "dorking_patterns", "investigation_leads"],
+          "realIntelligence": true,
+          "collectionMethod": "Search Query Generation"
         }
       ]
     },
     "username": {
       "name": "Username Intelligence",
-      "description": "Self-built username analysis and social presence prediction",
+      "description": "Real social media and platform reconnaissance",
       "sources": [
         {
-          "id": "username_analysis",
-          "name": "Username Pattern Analyzer",
-          "type": "pattern_analysis",
+          "id": "social_intelligence",
+          "name": "Social Media Intelligence",
+          "type": "social_intelligence",
           "confidence": 85,
           "enabled": true,
-          "description": "Analyzes username characteristics and predicts platform presence",
-          "dataTypes": ["patterns", "characteristics", "platform_likelihood"],
-          "selfBuilt": true,
-          "methodology": "Username pattern recognition"
+          "description": "Real social media platform verification via HTTP status checking",
+          "dataTypes": ["platform_verification", "profile_existence", "status_codes"],
+          "realIntelligence": true,
+          "collectionMethod": "HTTP Status Check"
         },
         {
-          "id": "social_crawler",
-          "name": "Social Presence Predictor",
-          "type": "social_analysis",
+          "id": "search_intelligence",
+          "name": "Username Search Intelligence",
+          "type": "search_intelligence",
           "confidence": 80,
           "enabled": true,
-          "description": "Predicts social media presence using probability modeling",
-          "dataTypes": ["platform_probability", "presence_likelihood", "account_estimation"],
-          "selfBuilt": true,
-          "methodology": "Social presence probability modeling"
-        },
-        {
-          "id": "username_generator",
-          "name": "Username Variant Generator",
-          "type": "variant_analysis",
-          "confidence": 75,
-          "enabled": true,
-          "description": "Generates likely username variations and alternatives",
-          "dataTypes": ["variations", "alternatives", "common_patterns"],
-          "selfBuilt": true,
-          "methodology": "Username variation analysis"
+          "description": "Generates username-specific search queries for investigation",
+          "dataTypes": ["username_queries", "platform_searches", "correlation_queries"],
+          "realIntelligence": true,
+          "collectionMethod": "Search Query Generation"
         }
       ]
     },
     "ip": {
-      "name": "IP Intelligence",
-      "description": "Self-built IP address analysis and geolocation prediction",
+      "name": "IP Intelligence", 
+      "description": "Real IP address analysis and geolocation",
       "sources": [
         {
-          "id": "ip_analyzer",
-          "name": "IP Pattern Analyzer",
-          "type": "ip_analysis",
+          "id": "ip_intelligence",
+          "name": "IP Geolocation Intelligence",
+          "type": "ip_intelligence",
           "confidence": 90,
           "enabled": true,
-          "description": "Analyzes IP address patterns, classes, and characteristics",
-          "dataTypes": ["ip_class", "private_public", "reserved_ranges"],
-          "selfBuilt": true,
-          "methodology": "IP address pattern analysis"
+          "description": "Real IP geolocation and organization data collection",
+          "dataTypes": ["geolocation", "organization", "network_info", "coordinates"],
+          "realIntelligence": true,
+          "collectionMethod": "IP Geolocation Database"
         },
         {
-          "id": "geolocation_predictor",
-          "name": "Geolocation Predictor",
-          "type": "geolocation",
-          "confidence": 70,
-          "enabled": true,
-          "description": "Predicts approximate location based on IP address patterns",
-          "dataTypes": ["location", "region", "estimated_coordinates"],
-          "selfBuilt": true,
-          "methodology": "IP-based location estimation"
-        },
-        {
-          "id": "network_analyzer",
-          "name": "Network Range Analyzer",
-          "type": "network_analysis",
+          "id": "dns_intelligence",
+          "name": "Reverse DNS Intelligence",
+          "type": "dns_intelligence",
           "confidence": 85,
           "enabled": true,
-          "description": "Analyzes network ranges and predicts ISP characteristics",
-          "dataTypes": ["network_range", "isp_prediction", "subnet_analysis"],
-          "selfBuilt": true,
-          "methodology": "Network range pattern analysis"
+          "description": "DNS reverse lookup and PTR record analysis",
+          "dataTypes": ["reverse_dns", "ptr_records", "hostname_resolution"],
+          "realIntelligence": true,
+          "collectionMethod": "DNS over HTTPS"
         }
       ]
     }
   },
   "settings": {
-    "maxConcurrentRequests": 5,
-    "defaultTimeout": 5000,
+    "maxConcurrentRequests": 3,
+    "defaultTimeout": 15000,
     "retryAttempts": 2,
-    "cacheTTL": 1800,
-    "rateLimitBuffer": 50,
-    "analysisDelay": {
-      "min": 300,
-      "max": 1000
-    }
+    "cacheTTL": 3600,
+    "rateLimitBuffer": 500,
+    "requestStaggering": 500
   },
   "capabilities": {
-    "selfContained": true,
-    "requiresExternalAPIs": false,
-    "privacyFriendly": true,
-    "educational": true,
-    "realTimeAnalysis": true
+    "realDataCollection": true,
+    "certificateTransparency": true,
+    "dnsOverHttps": true,
+    "socialMediaVerification": true,
+    "ipGeolocation": true,
+    "searchIntelligence": true,
+    "rateLimited": true,
+    "cached": true
   },
-  "methodologies": {
-    "patternRecognition": "Analyzes input patterns to predict characteristics and behaviors",
-    "probabilityModeling": "Uses statistical models to predict likelihood of various outcomes",
-    "structureAnalysis": "Breaks down inputs into components for detailed analysis",
-    "characteristicMapping": "Maps input characteristics to known patterns and behaviors"
+  "legal": {
+    "ethicalUse": "This tool is designed for legitimate security research and investigation purposes only",
+    "respectRobotsTxt": true,
+    "rateLimited": true,
+    "noScraping": "Uses only public APIs and HTTP status checks"
   }
 }
