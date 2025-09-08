@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Data Aggregator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔍 OSINT Data Aggregator</h1>
+            <p>Gather and visualize intelligence from public sources</p>
+        </header>
+
+        <main class="main">
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Enter domain, email, username, or IP address..." class="search-input">
+                    <select id="searchType" class="search-type">
+                        <option value="auto">Auto-detect</option>
+                        <option value="email">Email</option>
+                        <option value="domain">Domain</option>
+                        <option value="username">Username</option>
+                        <option value="ip">IP Address</option>
+                    </select>
+                    <button id="searchBtn" class="search-btn">Search</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="overview">Overview</button>
+                    <button class="tab-btn" data-tab="timeline">Timeline</button>
+                    <button class="tab-btn" data-tab="network">Network</button>
+                    <button class="tab-btn" data-tab="export">Export</button>
+                </div>
+
+                <div class="tab-content" id="overviewTab">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <h3>Search Results</h3>
+                            <div id="searchResults">
+                                <!-- Results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content hidden" id="timelineTab">
+                    <div class="timeline-container">
+                        <div id="timeline">
+                            <!-- Timeline will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content hidden" id="networkTab">
+                    <div class="network-container">
+                        <div id="networkGraph">
+                            <!-- Network graph will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content hidden" id="exportTab">
+                    <div class="export-container">
+                        <h3>Export Data</h3>
+                        <button class="export-btn">Export as JSON</button>
+                        <button class="export-btn">Export as CSV</button>
+                        <button class="export-btn">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>For educational and legitimate security research purposes only</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
