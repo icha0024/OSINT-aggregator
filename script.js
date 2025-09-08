@@ -3,13 +3,29 @@ class OSINTAggregator {
     constructor() {
         this.currentQuery = '';
         this.currentResults = {};
+        this.sourceManager = null;
         this.init();
     }
 
-    init() {
+    async init() {
         this.bindEvents();
         this.setupTabs();
-        console.log('OSINT Data Aggregator initialized');
+        
+        // Initialize source manager
+        try {
+            this.sourceManager = new SourceManager();
+            const initialized = await this.sourceManager.initialize();
+            
+            if (initialized) {
+                this.displaySourceStats();
+                console.log('OSINT Data Aggregator initialized with sources');
+            } else {
+                console.warn('OSINT Data Aggregator initialized without sources');
+            }
+        } catch (error) {
+            console.error('Failed to initialize source manager:', error);
+            console.log('OSINT Data Aggregator initialized without sources');
+        }
     }
 
     bindEvents() {
@@ -127,17 +143,54 @@ class OSINTAggregator {
     displayPlaceholderResults(query, searchType) {
         const resultsDiv = document.getElementById('searchResults');
         
+        // Get available sources for this search type (if source manager is loaded)
+        let sourcesHtml = '';
+        let sourceCount = 0;
+        
+        if (this.sourceManager && this.sourceManager.initialized) {
+            const availableSources = this.sourceManager.getSourcesForType(searchType);
+            sourceCount = availableSources.length;
+            
+            if (availableSources.length > 0) {
+                sourcesHtml = `
+                    <div class="sources-section">
+                        <h4>📡 Available Sources for ${searchType.charAt(0).toUpperCase() + searchType.slice(1)}</h4>
+                        <div class="sources-grid">
+                            ${availableSources.map(source => `
+                                <div class="source-card">
+                                    <div class="source-header">
+                                        <span class="source-name">${source.name}</span>
+                                        <span class="confidence-badge">${source.confidence}%</span>
+                                    </div>
+                                    <div class="source-description">${source.description}</div>
+                                    <div class="source-types">
+                                        ${source.dataTypes.slice(0, 3).map(type => 
+                                            `<span class="data-type">${type}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
         resultsDiv.innerHTML = `
             <div class="search-summary">
                 <h4>Search Results for: <span style="color: var(--accent-primary);">${query}</span></h4>
-                <p>Type: ${searchType.charAt(0).toUpperCase() + searchType.slice(1)}</p>
+                <p>Type: ${searchType.charAt(0).toUpperCase() + searchType.slice(1)} | Sources: ${sourceCount}</p>
                 <hr style="margin: 15px 0; border-color: var(--border-color);">
             </div>
             
+            ${sourcesHtml}
+            
             <div class="placeholder-message">
                 <p style="color: var(--text-secondary); text-align: center; padding: 20px;">
-                    🚧 OSINT data sources will be implemented in upcoming commits<br>
-                    This is the foundation structure for the aggregator
+                    ${sourceCount > 0 ? 
+                        `🚧 Data aggregation will be implemented in the next commit<br>Source framework is now ready with ${sourceCount} configured sources` :
+                        `🚧 OSINT data sources will be implemented in upcoming commits<br>This is the foundation structure for the aggregator`
+                    }
                 </p>
             </div>
         `;
@@ -145,6 +198,20 @@ class OSINTAggregator {
         // Update timeline and network tabs with placeholders
         this.updateTimelinePlaceholder();
         this.updateNetworkPlaceholder();
+    }
+
+    displaySourceStats() {
+        // Add source statistics to the footer or header
+        if (this.sourceManager && this.sourceManager.initialized) {
+            const stats = this.sourceManager.getSourceStats();
+            console.log('OSINT Sources loaded:', stats);
+            
+            // Update the header subtitle with source count
+            const headerP = document.querySelector('.header p');
+            if (headerP) {
+                headerP.textContent = `Gather and visualize intelligence from ${stats.totalSources} public sources`;
+            }
+        }
     }
 
     updateTimelinePlaceholder() {
@@ -179,5 +246,17 @@ class OSINTAggregator {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new OSINTAggregator();
+    // Load source manager script
+    const script = document.createElement('script');
+    script.src = './components/source-manager.js';
+    script.onload = () => {
+        // SourceManager is now available
+        new OSINTAggregator();
+    };
+    script.onerror = () => {
+        console.error('Failed to load source-manager.js');
+        // Initialize without sources
+        new OSINTAggregator();
+    };
+    document.head.appendChild(script);
 });

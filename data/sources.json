@@ -1,0 +1,180 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-09-08",
+  "categories": {
+    "email": {
+      "name": "Email Intelligence",
+      "description": "Sources for email-based investigations",
+      "sources": [
+        {
+          "id": "haveibeenpwned",
+          "name": "Have I Been Pwned",
+          "type": "breach_database",
+          "confidence": 95,
+          "enabled": true,
+          "description": "Check if email appears in known data breaches",
+          "dataTypes": ["breaches", "pastes"],
+          "apiEndpoint": "mock://haveibeenpwned.com/api/v3",
+          "rateLimit": "1500ms",
+          "mock": true
+        },
+        {
+          "id": "emailrep",
+          "name": "EmailRep",
+          "type": "reputation",
+          "confidence": 85,
+          "enabled": true,
+          "description": "Email reputation and deliverability data",
+          "dataTypes": ["reputation", "deliverability", "blacklist"],
+          "apiEndpoint": "mock://emailrep.io/api",
+          "rateLimit": "1000ms",
+          "mock": true
+        },
+        {
+          "id": "socialscan",
+          "name": "Social Media Scanner",
+          "type": "social_media",
+          "confidence": 80,
+          "enabled": true,
+          "description": "Check email usage across social platforms",
+          "dataTypes": ["accounts", "profiles", "registration_dates"],
+          "platforms": ["twitter", "instagram", "facebook", "linkedin"],
+          "mock": true
+        }
+      ]
+    },
+    "domain": {
+      "name": "Domain Intelligence",
+      "description": "Sources for domain-based investigations",
+      "sources": [
+        {
+          "id": "whois",
+          "name": "WHOIS Lookup",
+          "type": "registration",
+          "confidence": 98,
+          "enabled": true,
+          "description": "Domain registration and ownership information",
+          "dataTypes": ["registrar", "creation_date", "expiry_date", "nameservers", "contacts"],
+          "apiEndpoint": "mock://whois.lookup.api",
+          "mock": true
+        },
+        {
+          "id": "dns_records",
+          "name": "DNS Records",
+          "type": "infrastructure",
+          "confidence": 95,
+          "enabled": true,
+          "description": "DNS record analysis and subdomain enumeration",
+          "dataTypes": ["A", "AAAA", "MX", "TXT", "CNAME", "NS"],
+          "mock": true
+        },
+        {
+          "id": "certificate_transparency",
+          "name": "Certificate Transparency",
+          "type": "certificates",
+          "confidence": 90,
+          "enabled": true,
+          "description": "SSL certificate history and subdomain discovery",
+          "dataTypes": ["certificates", "subdomains", "issuers"],
+          "apiEndpoint": "mock://crt.sh/api",
+          "mock": true
+        },
+        {
+          "id": "shodan",
+          "name": "Shodan",
+          "type": "network_scan",
+          "confidence": 85,
+          "enabled": true,
+          "description": "Internet-connected device and service discovery",
+          "dataTypes": ["open_ports", "services", "banners", "vulnerabilities"],
+          "apiEndpoint": "mock://api.shodan.io",
+          "mock": true
+        }
+      ]
+    },
+    "username": {
+      "name": "Username Intelligence",
+      "description": "Sources for username-based investigations",
+      "sources": [
+        {
+          "id": "sherlock",
+          "name": "Sherlock",
+          "type": "social_media",
+          "confidence": 75,
+          "enabled": true,
+          "description": "Username enumeration across social platforms",
+          "dataTypes": ["profiles", "accounts", "registration_status"],
+          "platforms": ["github", "twitter", "instagram", "reddit", "youtube"],
+          "mock": true
+        },
+        {
+          "id": "github_osint",
+          "name": "GitHub OSINT",
+          "type": "code_repository",
+          "confidence": 90,
+          "enabled": true,
+          "description": "GitHub profile and repository analysis",
+          "dataTypes": ["repositories", "commits", "followers", "organizations"],
+          "apiEndpoint": "mock://api.github.com",
+          "mock": true
+        },
+        {
+          "id": "namemc",
+          "name": "NameMC",
+          "type": "gaming",
+          "confidence": 70,
+          "enabled": true,
+          "description": "Minecraft username history and skin data",
+          "dataTypes": ["name_history", "uuid", "skin_history"],
+          "mock": true
+        }
+      ]
+    },
+    "ip": {
+      "name": "IP Intelligence",
+      "description": "Sources for IP address investigations",
+      "sources": [
+        {
+          "id": "ipinfo",
+          "name": "IPInfo",
+          "type": "geolocation",
+          "confidence": 95,
+          "enabled": true,
+          "description": "IP geolocation and ISP information",
+          "dataTypes": ["location", "isp", "organization", "asn"],
+          "apiEndpoint": "mock://ipinfo.io/api",
+          "mock": true
+        },
+        {
+          "id": "virustotal_ip",
+          "name": "VirusTotal IP",
+          "type": "threat_intelligence",
+          "confidence": 90,
+          "enabled": true,
+          "description": "IP reputation and malware analysis",
+          "dataTypes": ["reputation", "malware", "detections", "related_domains"],
+          "apiEndpoint": "mock://www.virustotal.com/api/v3",
+          "mock": true
+        },
+        {
+          "id": "censys",
+          "name": "Censys",
+          "type": "network_scan",
+          "confidence": 85,
+          "enabled": true,
+          "description": "Internet-wide scanning and device fingerprinting",
+          "dataTypes": ["services", "certificates", "banners", "protocols"],
+          "apiEndpoint": "mock://search.censys.io/api",
+          "mock": true
+        }
+      ]
+    }
+  },
+  "settings": {
+    "maxConcurrentRequests": 5,
+    "defaultTimeout": 10000,
+    "retryAttempts": 3,
+    "cacheTTL": 3600,
+    "rateLimitBuffer": 100
+  }
+}
